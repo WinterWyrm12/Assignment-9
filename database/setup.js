@@ -29,6 +29,14 @@ const User = db.define('User', {
         allowNull: false
     },
     // TODO: Add role field (employee, manager, admin)
+    role: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: "employee",
+        validate: {
+            isIn: [['employee', 'manager', 'admin']]
+        }
+    }
 });
 
 // Project Model
@@ -87,7 +95,7 @@ Task.belongsTo(Project, { foreignKey: 'projectId' });
 User.hasMany(Task, { foreignKey: 'assignedUserId', as: 'assignedTasks' });
 Task.belongsTo(User, { foreignKey: 'assignedUserId', as: 'assignedUser' });
 
-// Initialize database
+// Initialize database - ALREADY DOES THIS IN SEED
 async function initializeDatabase() {
     try {
         await db.authenticate();
